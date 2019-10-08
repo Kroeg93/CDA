@@ -5,65 +5,76 @@ require 'thread'
 @thread_array = Array.new
 
 def think(philosoph)
-  print " -#{philosoph} does hard thinking\n"
+  puts " -#{philosoph} does hard thinking\n"
 end
 
 def take_left_fork(philosoph)
+  sleep(0.5)
   if @forks > 0
-    print " -#{philosoph} takes left fork"
+    puts " -#{philosoph} takes left fork"
     @forks = @forks - 1
-    print " -Forks: #{@forks}"
+    puts " -Forks: #{@forks}"
   else
-    @forks = 0
-    wait(philosoph)
+    puts " -#{philosoph} is waiting"
+    while (@forks == 0)
+    end
+    puts " -#{philosoph} takes left fork"
+    @forks = @forks - 1
+    puts " -Forks: #{@forks}"
   end
 end
 
+
 def take_right_fork(philosoph)
+  sleep(0.5)
   if @forks > 0
-    print " -#{philosoph} takes right fork"
+    puts " -#{philosoph} takes right fork"
     @forks = @forks - 1
-    print " -Forks: #{@forks}"
+    puts " -Forks: #{@forks}"
   else
-    @forks = 0
-    wait(philosoph)
+    puts " -#{philosoph} is waiting"
+    while (@forks == 0)
+    end
+    puts " -#{philosoph} takes left fork"
+    @forks = @forks - 1
+    puts " -Forks: #{@forks}"
   end
 end
 
 def return_left_fork(philosoph)
-  print " -#{philosoph} returns left fork"
+  puts " -#{philosoph} returns left fork"
   if @forks <= @fork_max
     @forks = @forks + 1
-    print " -Forks: #{@forks}"
+    puts " -Forks: #{@forks}"
   else
     @forks = @fork_max
-    print " -FORK OVERFLOW"
+    puts " -FORK OVERFLOW"
   end
 end
 
 def return_right_fork(philosoph)
-  print " -#{philosoph} returns right fork"
+  puts " -#{philosoph} returns right fork"
   if @forks <= @fork_max
     @forks = @forks + 1
-    print " -Forks: #{@forks}"
+    puts " -Forks: #{@forks}"
   else
     @forks = @fork_max
-    print "FORK OVERFLOW"
+    puts "FORK OVERFLOW"
   end
 end
 
 def eat(philosoph)
-  print " -#{philosoph} does Om nom nom nom"
+  puts " -#{philosoph} does Om nom nom nom"
 end
 
 def wait(philosoph)
-  print " -#{philosoph} is waiting"
+  puts " -#{philosoph} is waiting"
   while (@forks == 0)
   end
 end
 
 def philosophs_behaviour(philosoph)
-  while(true)
+  while (true)
     think(philosoph)
     take_left_fork(philosoph)
     take_right_fork(philosoph)
@@ -81,11 +92,11 @@ loop do
   @forks = input
 
   input.times do |i|
-      @philosophen << "P#{i}"
+    @philosophen << "P#{i}"
+    @forks
   end
 
-  @philosophen.each_with_index do |philosoph,index|
-    sleep(0.5)
+  @philosophen.each_with_index do |philosoph, index|
     Thread.new {
       @thread_array[index] = philosophs_behaviour(philosoph)
     }
